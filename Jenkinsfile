@@ -32,5 +32,12 @@ pipeline {
                 }
             }
         }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t azmighabi_4ssa16_appgestiondesprojets:${BUILD_NUMBER} -t azmighabi_4ssa16_appgestiondesprojets:latest ./backend'
+                sh 'docker image ls azmighabi_4ssa16_appgestiondesprojets'
+            }
+        }
     }
 }
