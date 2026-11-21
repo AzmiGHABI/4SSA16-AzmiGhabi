@@ -39,5 +39,23 @@ pipeline {
                 sh 'docker image ls azmighabi_4ssa16_appgestiondesprojets'
             }
         }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                    docker compose up -d
+                    for i in $(seq 1 20); do
+                        if curl -sf http://localhost:8081/actuator/health > /dev/null; then
+                            echo "Application deployee et saine"
+                            exit 0
+                        fi
+                        sleep 3
+                    done
+                    echo "Application non disponible apres 60s"
+                    docker compose ps
+                    exit 1
+                '''
+            }
+        }
     }
 }
